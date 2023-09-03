@@ -93,6 +93,7 @@ def account_login(login_type: str, login_id=None, login_password=None):
     if platform.system().lower() == 'linux':
         chromedriver = os.path.join(os.getcwd(), 'chromedriver_linux')
     elif platform.system().lower() == 'windows':
+        print(os.getcwd())
         chromedriver = os.path.join(os.getcwd(), 'chromedriver_windows')
     else:
         chromedriver = os.path.join(os.getcwd(), 'chromedriver_mac')

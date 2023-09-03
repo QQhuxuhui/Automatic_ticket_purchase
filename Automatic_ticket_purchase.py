@@ -13,6 +13,7 @@ import tools
 import argparse
 import requests
 from requests import session
+import datetime
 
 
 class DaMaiTicket:
@@ -20,13 +21,13 @@ class DaMaiTicket:
         # 登录信息
         self.login_cookies = {}
         self.session = session()
-        self.login_id: str = 'account'  # 大麦网登录账户名
-        self.login_password: str = 'password'  # 大麦网登录密码
+        self.login_id: str = '13004588605'  # 大麦网登录账户名
+        self.login_password: str = 'QQhuxuhui@'  # 大麦网登录密码
         # 以下为抢票必须的参数
-        self.item_id: int = 610820299671  # 商品id
-        self.viewer: list = ['viewer1']  # 在大麦网已填写的观影人
-        self.buy_nums: int = 1  # 购买影票数量, 需与观影人数量一致
-        self.ticket_price: int = 180  # 购买指定票价
+        self.item_id: int = 736180626739  # 商品id
+        self.viewer: list = ['岳靓','常宸彰']  # 在大麦网已填写的观影人
+        self.buy_nums: int = 2  # 购买影票数量, 需与观影人数量一致
+        self.ticket_price: int = 2580  # 购买指定票价
 
     def step1_get_order_info(self, item_id, commodity_param, ticket_price=None):
         """
@@ -55,8 +56,20 @@ class DaMaiTicket:
             'accept-language': 'zh,en;q=0.9,en-US;q=0.8,zh-CN;q=0.7',
         }
 
-        response = self.session.get('https://detail.damai.cn/subpage', headers=headers, params=commodity_param)
-        ticket_info = json.loads(response.text.replace('null(', '').replace('__jp0(', '')[:-1])
+        while True:
+            try:
+                response = self.session.get('https://detail.damai.cn/subpage', headers=headers, params=commodity_param)
+                ticket_info = json.loads(response.text.replace('null(', '').replace('__jp0(', '')[:-1])
+                
+                # 获取当前时间
+                current_time = datetime.datetime.now()
+
+                # 将时间戳添加到要打印的信息中
+                message = f"当前时间是：{current_time},请求成功一次"
+                print(message);
+                break;
+            except Exception as e:
+                print("页面请求发生异常，重新发起请求");
         all_ticket_sku = ticket_info['perform']['skuList']
         sku_id_sequence = 0
         sku_id = ''
